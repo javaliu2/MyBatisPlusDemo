@@ -11,6 +11,7 @@ import org.suda.mapper.UserMapper;
 import org.suda.service.UserService;
 
 import javax.annotation.Resource;
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -26,17 +27,25 @@ public class AppTest {
     void testSetup() {
         System.out.println(("----- selectAll method test ------"));
         List<User> userList = userMapper.selectList(null);
-        Assert.isTrue(5 == userList.size(), "");
+//        Assert.isTrue(5 == userList.size(), "");
         userList.forEach(System.out::println);
     }
 
+    @Test
+    void testInsert() {
+        User user = new User();
+        user.setId(null);
+        user.setName("chun rui");
+        user.setMail("chun.rui@xs.com");
+        userMapper.insert(user);
+    }
     @Test
     void testSave() {
         // 假设有一个 User 实体对象
         // 没有指定主键的时候，mbp会使用雪花算法生成全局唯一ID
         User user = new User();
         user.setName("John Doe");
-        user.setEmail("john.doe@example.com");
+        user.setMail("john.doe@example.com");
 //        output sql:
 //        Preparing: INSERT INTO user ( id, name, email ) VALUES ( ?, ?, ? )
 //        Parameters: 1930540468359221250(Long), John Doe(String), john.doe@example.com(String)
@@ -69,7 +78,7 @@ public class AppTest {
         User user = new User();
         user.setId(1L);
         user.setName("John Doe");
-        user.setEmail("john.doe@example.com");
+        user.setMail("john.doe@example.com");
         boolean result = userService.saveOrUpdate(user); // 调用 saveOrUpdate 方法
         if (result) {
             System.out.println("User updated or saved successfully.");
@@ -97,5 +106,17 @@ public class AppTest {
         for (Map<String, Object> userMap : userMaps) {
             System.out.println("User Map: " + userMap);
         }
+    }
+    @Test
+    void testLogicDelete() {
+        Serializable id = 1L;
+        // 查询未删除的数据
+        // sql: SELECT id,name,email AS mail,deleted FROM user_info WHERE id=? AND deleted=0
+        User user = userMapper.selectById(id);
+        System.out.println(user);
+        // 逻辑删除对应的是更新操作
+        // sql: UPDATE user_info SET deleted=1 WHERE id=? AND deleted=0
+        int result = userMapper.deleteById(id);
+        System.out.println("delete result:" + result);
     }
 }

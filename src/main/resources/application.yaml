@@ -11,3 +11,9 @@ spring:
 logging:
   level:
     org.suda: debug
+mybatis-plus:
+  global-config:
+    db-config:
+      logic-delete-field: deleted  # 全局逻辑删除字段名，配置后可以不用@TableLogic注解
+      logic-delete-value: 1
+      logic-not-delete-value: 0
