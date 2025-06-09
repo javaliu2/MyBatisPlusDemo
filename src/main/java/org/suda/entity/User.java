@@ -25,4 +25,9 @@ public class User {
     }
 //    @TableLogic  // 已进行全局配置，这里不用使用注解
     private Integer deleted;
+
+    private Integer amount;
+
+    @Version
+    private Integer version;
 }
