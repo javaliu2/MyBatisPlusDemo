@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 @TableName("user_info")
 public class User {
-//    @TableId(value="id", type = IdType.AUTO)
+//    @TableId(value="id", type = IdType.INPUT)
     private Long id;
     private String name;
     @TableField(select = false)  // 不对该属性进行select查询

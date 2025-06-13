@@ -7,8 +7,14 @@ import org.suda.entity.User;
 import org.suda.mapper.UserMapper;
 import org.suda.service.UserService;
 
+import javax.annotation.Resource;
+import java.util.List;
+
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
+
+    @Resource
+    private UserMapper userMapper;
     @Override
     public void saveMoney(Long id, int amount) {
         String threadName = Thread.currentThread().getName();
@@ -86,5 +92,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 //        updateUser.setVersion(user.getVersion());
         user.setAmount(new_amount);
         this.updateById(user);
+    }
+
+    @Override
+    public List<User> myGetPage(int pageNum, int pageSize) {
+        int offset = (pageNum - 1) * pageSize;
+        return userMapper.mySelectPage(offset, pageSize);
     }
 }
